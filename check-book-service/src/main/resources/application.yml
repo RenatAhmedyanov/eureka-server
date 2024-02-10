@@ -1,0 +1,50 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: check-book-service
+  profiles:
+    active: dev
+  config:
+    import: "optional:configserver:"
+  cloud:
+    bus:
+      enabled: true
+      refresh:
+        enabled: true
+    stream:
+      kafka:
+        binder:
+          auto-add-partitions: true
+      bindings:
+        checkBookEventProcessor-in-0:
+          destination: create-book
+        checkBookEventProcessor-out-0:
+          destination: store-book
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    enabled-by-default: true
+  endpoint:
+    beans:
+      enabled: true
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+
+#test-property:
+#  field: 123
+

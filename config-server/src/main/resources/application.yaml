@@ -1,0 +1,31 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: git
+  cloud:
+    bus:
+      enabled: true
+      refresh:
+        enabled: true
+      id: config-server
+    config:
+      server:
+        git:
+          uri: https://github.com/RenatAhmedyanov/ms-config-properties
+          search-paths:
+            - "/{application}/{profile}"
+          default-label: master
+    stream:
+      kafka:
+        binder:
+          auto-add-partitions: true
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
